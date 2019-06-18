@@ -6,7 +6,8 @@ public class FloorAppear : MonoBehaviour
 {
 
     public float height;
-    public float speed;
+    public float platformSpeed;
+    public float spawnSpeed;
     float newspeed;
 
     public GameObject player;
@@ -42,7 +43,7 @@ public class FloorAppear : MonoBehaviour
 
     private void SummonMove()
     {
-        transform.position = Vector3.Lerp(transform.position, finalPos, speed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, finalPos, platformSpeed * Time.deltaTime);
         newspeed *= 1.001f;
 
         if (transform.position.y >= finalPos.y - 0.01f)
@@ -55,7 +56,7 @@ public class FloorAppear : MonoBehaviour
 
     private IEnumerator SummonDelay(){
         canSummon = false;
-        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / 8)); 
+        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / spawnSpeed)); 
         Summon();
     }
 
@@ -63,7 +64,7 @@ public class FloorAppear : MonoBehaviour
     {
         if (!isSummoning)
         {
-            newspeed = speed;
+            newspeed = platformSpeed;
             isSummoning = true;
         }
         
