@@ -55,7 +55,7 @@ public class FloorAppear : MonoBehaviour
 
     private IEnumerator SummonDelay(){
         canSummon = false;
-        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, transform.position) / 2) - 4); 
+        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / 8)); 
         Summon();
     }
 
