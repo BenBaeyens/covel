@@ -23,7 +23,10 @@ public class FloorAppear : MonoBehaviour
 
     private void Start() {
         player = GameObject.Find("Player");
-            }
+        finalPos = transform.position;
+        transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
+
+        }
 
 
     private void Update()
@@ -52,7 +55,7 @@ public class FloorAppear : MonoBehaviour
 
     private IEnumerator SummonDelay(){
         canSummon = false;
-        yield return new WaitForSeconds(Vector3.Distance(player.transform.position, transform.position) / 10); 
+        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, transform.position) / 2) - 4); 
         Summon();
     }
 
@@ -61,8 +64,6 @@ public class FloorAppear : MonoBehaviour
         if (!isSummoning)
         {
             newspeed = speed;
-            finalPos = transform.position;
-            transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
             isSummoning = true;
         }
         
