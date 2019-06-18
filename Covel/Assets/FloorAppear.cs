@@ -2,39 +2,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorFade : MonoBehaviour
+public class FloorAppear : MonoBehaviour
 {
-    [SerializeField] float fadePerSecond;
-    Material material;
-    Color color;
 
-    #region Methods
-    
+    public float height;
+    public float speed;
+    float newspeed;
 
-    void start(){
-        color = GetComponent<Renderer>().material.color;
-        color.a = 0f;
-        //GetComponent<Renderer>().material.SetInt("_ZWrite", 1);
+    public GameObject player;
+
+    bool canSummon = false;
+    bool isSummoning = false;
+    bool hasSummoned = false;
+
+
+    Vector3 finalPos;
+
+    #region methods
+
+
+    private void Start() {
+        player = GameObject.Find("Player");
+            }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && !hasSummoned)
+            canSummon = true;
+
+        if (canSummon)
+            StartCoroutine("SummonDelay");
+        if(isSummoning)
+            SummonMove();
     }
- 
-     private void Update() {
-       
-        
- 
-        if(color.a < 255){
-            color.a += fadePerSecond * Time.deltaTime;
-          GetComponent<Renderer>().material.color = new Color(color.r, color.g, color.b, color.a);
+
+    private void SummonMove()
+    {
+        transform.position = Vector3.Lerp(transform.position, finalPos, speed * Time.deltaTime);
+        newspeed *= 1.001f;
+
+        if (transform.position.y >= finalPos.y - 0.01f)
+        {
+            transform.position = finalPos;
+
+            isSummoning = false;
         }
-      
-       if(Input.GetKeyDown(KeyCode.Space))
-            GetComponent<Renderer>().material.color = new Color(50, 50, 255, 0f);
-         
-     }
- 
+    }
 
+    private IEnumerator SummonDelay(){
+        canSummon = false;
+        yield return new WaitForSeconds(Vector3.Distance(player.transform.position, transform.position) / 10); 
+        Summon();
+    }
 
-
-
+    private void Summon()
+    {
+        if (!isSummoning)
+        {
+            newspeed = speed;
+            finalPos = transform.position;
+            transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
+            isSummoning = true;
+        }
+        
+    }
 
     #endregion
 }
