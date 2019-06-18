@@ -7,6 +7,7 @@ public class FloorAppear : MonoBehaviour
 
     public float height;
     public float speed;
+    float newspeed;
 
     public GameObject player;
 
@@ -30,31 +31,39 @@ public class FloorAppear : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !hasSummoned)
             canSummon = true;
 
-        if(canSummon)
-            Summon();
+        if (canSummon)
+            StartCoroutine("SummonDelay");
+        if(isSummoning)
+            SummonMove();
     }
 
-    private IEnumerator SummonDelay(){
-        yield return new WaitForSeconds(Vector3.Distance(player.transform.position, transform.position)); 
-    }
-
-    private void Summon()
+    private void SummonMove()
     {
-        float newspeed = speed;
-        if (!isSummoning)
-        {
-            finalPos = transform.position;
-            transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
-            isSummoning = true;
-        }
         transform.position = Vector3.Lerp(transform.position, finalPos, speed * Time.deltaTime);
         newspeed *= 1.001f;
 
         if (transform.position.y >= finalPos.y - 0.01f)
         {
             transform.position = finalPos;
-            canSummon = false;
+
             isSummoning = false;
+        }
+    }
+
+    private IEnumerator SummonDelay(){
+        canSummon = false;
+        yield return new WaitForSeconds(Vector3.Distance(player.transform.position, transform.position) / 10); 
+        Summon();
+    }
+
+    private void Summon()
+    {
+        if (!isSummoning)
+        {
+            newspeed = speed;
+            finalPos = transform.position;
+            transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
+            isSummoning = true;
         }
         
     }
