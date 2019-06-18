@@ -12,7 +12,6 @@ public class FloorAppear : MonoBehaviour
 
     public GameObject player;
 
-    bool canSummon = false;
     bool isSummoning = false;
  
 
@@ -32,13 +31,11 @@ public class FloorAppear : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)){
-            canSummon = true;
-            Start();
-            }
-
-        if (canSummon)
+        if (Input.GetKeyDown(KeyCode.Space))
             StartCoroutine("SummonDelay");
+            
+
+       
         if(isSummoning)
             SummonMove();
     }
@@ -57,7 +54,6 @@ public class FloorAppear : MonoBehaviour
     }
 
     private IEnumerator SummonDelay(){
-        canSummon = false;
         yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / spawnSpeed)); 
         newspeed = platformSpeed;
         isSummoning = true;
