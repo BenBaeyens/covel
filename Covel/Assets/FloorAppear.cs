@@ -5,26 +5,27 @@ using UnityEngine;
 public class FloorAppear : MonoBehaviour
 {
 
-    public float height;
-    public float platformSpeed;
-    public float spawnSpeed;
+    [SerializeField] float additionalFloorHeight;
+
+    GameManager gameManager;
+
+    
     float newspeed;
 
-    public GameObject player;
+    GameObject player;
 
     bool isSummoning = false;
  
-
-
     Vector3 finalPos;
 
     #region methods
 
 
     private void Start() {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
         finalPos = transform.position;
-        transform.position = new Vector3(transform.position.x, transform.position.y - height, transform.position.z);
+        transform.position = new Vector3(transform.position.x, transform.position.y - gameManager.floorHeight, transform.position.z);
 
         }
 
@@ -32,30 +33,29 @@ public class FloorAppear : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            StartCoroutine("SummonDelay");
+            StartCoroutine("Summon");
             
 
        
         if(isSummoning)
-            SummonMove();
+            FloorMoveUp();
     }
 
-    private void SummonMove()
+    private void FloorMoveUp()
     {
-        transform.position = Vector3.Lerp(transform.position, finalPos, platformSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, finalPos, gameManager.floorSpeed * Time.deltaTime);
         newspeed *= 1.001f;
 
         if (transform.position.y >= finalPos.y - 0.01f)
         {
             transform.position = finalPos;
-
             isSummoning = false;
         }
     }
 
-    private IEnumerator SummonDelay(){
-        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / spawnSpeed)); 
-        newspeed = platformSpeed;
+    private IEnumerator Summon(){
+        yield return new WaitForSeconds(Vector3.Distance(player.transform.position, finalPos) / gameManager.floorSpawnSpeed); 
+        newspeed = gameManager.floorSpeed;
         isSummoning = true;
         
     }
