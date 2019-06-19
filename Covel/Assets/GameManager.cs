@@ -9,5 +9,5 @@ public class GameManager : MonoBehaviour
     public float floorHeight;
     public float floorSpeed;
     public float floorSpawnSpeed; //Time between platform spawns
-    
+    public ParticleSystem floorFinishParticles;
 }
