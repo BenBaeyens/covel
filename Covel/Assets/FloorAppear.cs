@@ -50,7 +50,7 @@ public class FloorAppear : MonoBehaviour
         {
             transform.position = finalPos;
             isSummoning = false;
-            Destroy(Instantiate(gameManager.floorFinishParticles, transform.position, transform.rotation, transform), 5f);
+            Destroy(Instantiate(gameManager.floorFinishParticles.gameObject, transform.position, transform.rotation, transform), 5f);
         }
     }
 
