@@ -56,7 +56,7 @@ public class FloorAppear : MonoBehaviour
     }
 
     private IEnumerator Summon(){
-        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / gameManager.floorSpawnSpeed) - 1); 
+        yield return new WaitForSeconds((Vector3.Distance(player.transform.position, finalPos) / gameManager.floorSpawnSpeed) - 0.5f); 
         newspeed = gameManager.floorSpeed;
         isSummoning = true;
         
